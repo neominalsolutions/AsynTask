@@ -24,7 +24,26 @@ namespace FormSample
     {
 
       Console.WriteLine("Token" + c.Token);
-      await DoAsync(c.Token);
+      await DoAsync2(c.Token);
+    }
+
+    async ValueTask<int> DoAsync2(CancellationToken token)
+    {
+      try
+      {
+        await Task.Delay(5000);
+
+        if (token.IsCancellationRequested)
+        {
+          token.ThrowIfCancellationRequested();
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show(ex.Message);
+      }
+
+      return 5;
     }
 
     async Task<int> DoAsync(CancellationToken token)
